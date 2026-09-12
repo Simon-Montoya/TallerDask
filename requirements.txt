@@ -1,0 +1,6 @@
+dask[distributed,dataframe]
+pandas
+numpy
+pyarrow
+prefect
+bokeh>=3.1.0

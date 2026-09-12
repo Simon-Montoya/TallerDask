@@ -1,0 +1,68 @@
+services:
+
+  dask-scheduler:
+    build: .
+    container_name: dask-scheduler
+    command: dask scheduler
+    ports:
+      - "8786:8786"
+      - "8787:8787"
+    volumes:
+      - ./shared-data:/app/shared-data
+    networks:
+      - dask-cluster-net
+    mem_limit: 1g
+    cpus: 1.0
+
+  dask-worker-1:
+    build: .
+    container_name: dask-worker-1
+    command: >
+      dask worker tcp://dask-scheduler:8786
+      --nthreads 2
+      --memory-limit 1500MB
+    depends_on:
+      - dask-scheduler
+    volumes:
+      - ./shared-data:/app/shared-data
+    networks:
+      - dask-cluster-net
+    mem_limit: 1500m
+    cpus: 2.0
+
+  dask-worker-2:
+    build: .
+    container_name: dask-worker-2
+    command: >
+      dask worker tcp://dask-scheduler:8786
+      --nthreads 2
+      --memory-limit 1500MB
+    depends_on:
+      - dask-scheduler
+    volumes:
+      - ./shared-data:/app/shared-data
+    networks:
+      - dask-cluster-net
+    mem_limit: 1500m
+    cpus: 2.0
+
+  dask-worker-3:
+    build: .
+    container_name: dask-worker-3
+    command: >
+      dask worker tcp://dask-scheduler:8786
+      --nthreads 2
+      --memory-limit 1500MB
+    depends_on:
+      - dask-scheduler
+    volumes:
+      - ./shared-data:/app/shared-data
+    networks:
+      - dask-cluster-net
+    mem_limit: 1500m
+    cpus: 2.0
+
+
+networks:
+  dask-cluster-net:
+    driver: bridge
